@@ -87,3 +87,48 @@ The starter now includes:
 - Production deploy workflows.
 - Secrets management per environment.
 - Prisma migration history generated from live schema updates.
+
+---
+
+# Student Internship Additions
+
+This repository has been prepared for CTU Bloemfontein interns participating in the Blaze Web Works remote internship.
+
+## Where Interns Should Start
+
+Students should begin with:
+
+1. `STUDENT_START_HERE.md`
+2. `docs/internship/REMOTE_INTERNSHIP_PLAN.md`
+3. `docs/internship/FIRST_WEEK_TRAINING_SCHEDULE.md`
+4. `docs/training/GITHUB_WORKFLOW.md`
+5. `docs/training/SOFTWARE_STUDENT_PATH.md` or `docs/training/CYBER_SECURITY_STUDENT_PATH.md`
+6. `docs/backlog/STUDENT_STARTER_TASKS.md`
+
+## Internship Groups
+
+Current groups supported by this repository:
+
+- Software Developers / Software Engineers
+- Cyber Security Analysts
+
+CAD students should use the separate Synergy Inc. CAD repository. Design students are not part of the current internship intake.
+
+## GitHub Workflow
+
+Students should not commit directly to `main`. Work should be completed on branches and submitted using pull requests.
+
+Recommended branch format:
+
+```text
+student/<student-name>/<task-name>
+training/<student-name>/<topic>
+docs/<short-doc-name>
+fix/<short-bug-name>
+```
+
+## Technical Alignment Note
+
+The existing repository currently uses Prisma for ORM/database workflow. Earlier planning referenced Drizzle ORM. The project owner or mentor should confirm whether the project will continue with Prisma or migrate to Drizzle before assigning database implementation tasks.
+
+See `docs/technical/ORM_DECISION_NOTE.md`.

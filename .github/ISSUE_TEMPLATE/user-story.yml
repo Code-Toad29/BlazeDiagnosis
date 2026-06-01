@@ -1,0 +1,35 @@
+name: User Story
+about: Define a product user story with acceptance criteria.
+title: "[User Story]: "
+labels: ["user-story", "needs-triage"]
+body:
+  - type: textarea
+    id: story
+    attributes:
+      label: User Story
+      value: |
+        As a ...
+        I want ...
+        So that ...
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance Criteria
+      value: |
+        - [ ] 
+        - [ ] 
+        - [ ] 
+    validations:
+      required: true
+  - type: textarea
+    id: tasks
+    attributes:
+      label: Suggested Tasks
+      value: |
+        - [ ] Frontend
+        - [ ] Backend
+        - [ ] Database
+        - [ ] Security review
+        - [ ] Documentation

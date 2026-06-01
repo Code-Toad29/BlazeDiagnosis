@@ -17,3 +17,15 @@ backend/prisma/*.db-journal
 .DS_Store
 .vscode/
 .idea/
+
+# Internship safety additions
+.env
+.env.*
+!.env.example
+!.env.*.example
+node_modules/
+.next/
+dist/
+build/
+coverage/
+.DS_Store

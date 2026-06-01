@@ -1,0 +1,30 @@
+name: Security Review
+description: Create a security review task for cyber security interns.
+title: "[Security Review]: "
+labels: ["security", "student-task", "needs-review"]
+body:
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope
+      description: What area should be reviewed?
+    validations:
+      required: true
+  - type: textarea
+    id: checks
+    attributes:
+      label: Checks to Perform
+      value: |
+        - [ ] Confirm no secrets are committed.
+        - [ ] Review authorization checks.
+        - [ ] Review customer data exposure risk.
+        - [ ] Review error handling for sensitive detail leakage.
+        - [ ] Document findings and recommendations.
+    validations:
+      required: true
+  - type: textarea
+    id: rules
+    attributes:
+      label: Testing Rules
+      value: |
+        Only test local, demo, or explicitly approved environments. Do not test production systems or third-party systems.

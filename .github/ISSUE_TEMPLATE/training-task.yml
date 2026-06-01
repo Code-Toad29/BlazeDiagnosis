@@ -1,0 +1,28 @@
+name: Training Task
+description: Assign a learning or setup task to a student.
+title: "[Training]: "
+labels: ["training", "student-task"]
+body:
+  - type: textarea
+    id: learning_goal
+    attributes:
+      label: Learning Goal
+      description: What should the student learn?
+    validations:
+      required: true
+  - type: textarea
+    id: checklist
+    attributes:
+      label: Checklist
+      value: |
+        - [ ] Read the linked material.
+        - [ ] Take notes.
+        - [ ] Complete the practice task.
+        - [ ] Submit questions or blockers.
+    validations:
+      required: true
+  - type: textarea
+    id: resources
+    attributes:
+      label: Resources
+      description: Add links to documentation or internal files.
