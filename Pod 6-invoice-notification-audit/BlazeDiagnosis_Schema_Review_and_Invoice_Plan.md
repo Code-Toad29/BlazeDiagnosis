@@ -408,6 +408,39 @@ model AuditLog {
   @@index([invoiceId, action])
 }
 
+---
+
+### Audit Writer Helper Plan
+
+Add a small server-side helper (`apps/web/src/lib/auditWriter.ts`) to standardize audit log writes.
+
+- Purpose: Provide a single API for services to record `AuditLog` events (invoice create, update, send, payment events).
+- Constraints: Only call from server-side code (API routes or server components). Redact or encrypt PII before persisting.
+- Storage: Persist to `AuditLog` table and mirror important events to append-only storage for long-term retention.
+
+Implementation steps:
+
+1. Create `apps/web/src/lib/auditWriter.ts` with `writeAudit(entry)` exported; entry shape: `{ userId?, action, resource, resourceId?, description?, changeSet?, ipAddress?, userAgent?, timestamp? }`.
+2. Implement server API `/api/audit` which validates caller identity and writes to DB (or call `writeAudit` directly from server-side services).
+3. Add redaction/encryption hook for `changeSet` when `DataClassification` >= `CONFIDENTIAL`.
+4. Add tests verifying audit entries are created and redaction applied.
+
+Example usage (server-side):
+
+```ts
+import { writeAudit } from 'apps/web/src/lib/auditWriter'
+
+await writeAudit({
+  userId: currentUser.id,
+  action: 'INVOICE_CREATED',
+  resource: 'INVOICE',
+  resourceId: invoice.id,
+  description: 'Invoice created after job completion',
+  changeSet: { totalAmount: invoice.totalAmount },
+})
+```
+
+
 model AuditReport {
   id                String    @id @default(cuid())
   workshopId        String
