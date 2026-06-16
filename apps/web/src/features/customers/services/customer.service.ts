@@ -65,10 +65,8 @@ export async function deleteCustomer(
   tenantId: string,
   customerId: string
 ) {
-
   // Ensure user has permission to delete customers
   await requireTenantPermission(tenantId, 'customers.write');
-
   // Delete customer only within the current tenant
   await db
     .delete(customers)
