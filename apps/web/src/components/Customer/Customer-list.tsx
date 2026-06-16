@@ -26,10 +26,9 @@ export const CustomerList: React.FC = () => {
                         <tr key={customer.id} className="border-b border-gray-300">
                             <td className="p-2 font-bold">{customer.name}</td>
                             <td className="p-2">{customer.email}</td>
-                            <td className="p-2">
-                                <span className={`font-bold ${customer.status === 'Pending' ? 'text-orange-500' : 'text-green-500'}`}>
-                                    {customer.status}
-                                </span>
+                            <td className="p-2">{customer.phone}</td>
+                            <td className={`p-2 font-bold ${customer.status === 'Pending' ? 'text-orange-500' : 'text-green-500'}`}>
+                                {customer.status}
                             </td>
                         </tr>
                     ))}
