@@ -37,7 +37,7 @@ const VehicleForm: React.FC = () => {
         fuelType: "",
         transmission: "",
         odometer: "",
-        color: ""
+        color: "",
     })
 
 //This code gives your form its behavior. The handleChange function updates the vehicle state whenever you type into an input or
