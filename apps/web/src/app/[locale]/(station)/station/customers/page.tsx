@@ -1,6 +1,10 @@
 import { AppShell } from '@/components/common/app-shell';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import React from 'react';
+import { db } from '@/db/client';
+import { customers as customersTable } from '@/db/schema/customers';
+import { requireTenantContext } from '@/lib/tenancy/tenant-context';
+import { eq } from 'drizzle-orm';
 
 export const revalidate = 0;
 
@@ -9,18 +13,39 @@ interface Customer {
   id: string;
   fullName: string;
   mobileNumber: string;
-  alternateNumber: string;
-  email: string;
-  address: string;
-  companyName: string;
-  taxNumber: string;
-  preferredCommunicationChannel: string;
-  marketingConsent: boolean;
+  alternateNumber: string | null;
+  email: string | null;
+  address: string | null;
+  companyName: string | null;
+  taxNumber: string | null;
+  preferredCommunicationChannel: string | null;
+  marketingConsent: boolean | null;
 }
 
 export default async function StationCustomersPage() {
-  // Static empty array for MVP Phase 2 placeholder tracking
-  const customers: Customer[] = [];
+  // 1. Enforce secure tenant session token boundaries
+  const tenant = await requireTenantContext();
+  const tenantId = tenant.tenantId;
+
+  // 2. Fetch live data records isolated completely to this tenant
+  const rawCustomers = await db
+    .select()
+    .from(customersTable)
+    .where(eq(customersTable.tenantId, tenantId));
+
+  // 3. Map database rows cleanly to the component's expected Customer interface fields
+  const customers: Customer[] = rawCustomers.map((c) => ({
+    id: c.id,
+    fullName: `${c.firstName || ''} ${c.lastName || ''}`.trim() || 'Unknown Customer',
+    mobileNumber: c.phone || 'N/A',
+    alternateNumber: null, // Placeholder if your database schema lacks this field
+    email: c.email,
+    address: null,         // Placeholder if your database schema lacks this field
+    companyName: null,     // Placeholder if your database schema lacks this field
+    taxNumber: null,       // Placeholder if your database schema lacks this field
+    preferredCommunicationChannel: 'Email',
+    marketingConsent: false,
+  }));
 
   return (
     <AppShell surface="station" title="Customers">

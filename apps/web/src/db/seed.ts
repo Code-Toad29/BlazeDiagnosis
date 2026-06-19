@@ -1,9 +1,6 @@
 import { drizzle } from 'drizzle-orm/node-postgres';
 import { Pool } from 'pg';
-import * as dotenv from 'dotenv'; // 1. Import dotenv
-
-// 2. Load the environment variables from your local .env file
-dotenv.config({ path: '.env.local' }); // Or use '.env' if your string is in the main .env file
+import 'dotenv/config';
 
 // Import the tables directly from the schema paths
 import { tenants } from './schema/tenants';

@@ -2,9 +2,10 @@ import { createCustomerSchema } from '@/features/customers/schemas/customer.sche
 import { createCustomer } from '@/features/customers/services/customer.service';
 import { requireTenantContext } from '@/lib/tenancy/tenant-context';
 import { NextResponse } from 'next/server';
-import { db } from '@/db'; // Adjusted based on your local workspace configuration
+import { db } from '@/db/client';
 import { customers } from '@/db/schema/customers';
-import { eq, and } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
+import { ZodError } from 'zod';
 
 // GET Handler: Fetch tenant-isolated active customers
 export async function GET(request: Request) {
@@ -12,9 +13,9 @@ export async function GET(request: Request) {
     // 1. Enforce strict tenant session initialization boundaries
     const tenant = await requireTenantContext();
     
-    // 2. Fallback query string fallback check if fallback parsing is required
-    const { searchParams } = new URL(request.url);
-    const tenantId = searchParams.get('tenantId') || tenant.tenantId;
+    // 2. Security Fix: Restrict data access strictly to the active authenticated context token 
+    // to prevent cross-tenant data leaks via URL parameter manipulation.
+    const tenantId = tenant.tenantId;
 
     if (!tenantId) {
       return NextResponse.json(
@@ -43,6 +44,11 @@ export async function GET(request: Request) {
 
 // POST Handler: Securely create a new customer profile attached to active tenant
 export async function POST(req: Request) {
+
+  // The try block is used to handle the main logic of the POST request, which includes validating the tenant context, parsing the request body, 
+  // validating the input against the schema, and creating a new customer in the database.
+  // If any of these steps fail, the catch block will handle the error and return a JSON response with an appropriate error message and status code.
+
   try {
     const tenant = await requireTenantContext();
     const body = await req.json();
@@ -56,8 +62,9 @@ export async function POST(req: Request) {
   } catch (error: any) {
     console.error(' POST API Multi-Tenant Route Error:', error);
     
-    // Handle Zod parsing schema failures gracefully
-    if (error.name === 'ZodError') {
+    // The catch block handles different types of errors that may occur during the execution.
+    // If the error is an instance of ZodError, input validation failed, returning a 400 Bad Request.
+    if (error instanceof ZodError) {
       return NextResponse.json(
         { error: 'Validation Failed', issues: error.errors },
         { status: 400 }
